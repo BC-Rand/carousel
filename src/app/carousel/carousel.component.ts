@@ -25,16 +25,11 @@ export class CarouselComponent implements OnInit {
   @HostListener('window:keydown.arrowright', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.key == "ArrowRight") {
-      console.log("ArrowRight")
       this.arrowRight()
     } else if (event.key == "ArrowLeft") {
-      console.log("ArrowLeft")
       this.arrowLeft()
     }
   }
-
-  private debounceLeft = true;
-  private debounceRight = true;  
 
   // Array of pictures to display and our current picture index in it
   public displayPictureArray: PicResponse[] = [];
@@ -88,13 +83,13 @@ export class CarouselComponent implements OnInit {
 
   // Main gallery next button
   public next(): void {
-    if (this.animationQueue.length < 5) this.animationQueue.push(true);
+    if (this.animationQueue.length < 3) this.animationQueue.push(true);
     if (!this.animating) this.animationManager();
   }
 
   // Main gallery previous button
   public previous(): void {
-    if (this.animationQueue.length < 5) this.animationQueue.push(false);
+    if (this.animationQueue.length < 3) this.animationQueue.push(false);
     if (!this.animating) this.animationManager();
   }
 
@@ -105,16 +100,8 @@ export class CarouselComponent implements OnInit {
     if (this.modalActive) {
       this.modalNext();
     } else {
-      if (this.debounceRight) {
-        this.next();
-        this.debounceRight = false;
-        setTimeout(this.arrowRightCallback.bind(this), this.timeNumber);
-      }
+      this.next();
     }
-  }
-
-  public arrowRightCallback() {
-    this.debounceRight = true;
   }
 
   // Navigate left on a left arrow key press
@@ -122,16 +109,8 @@ export class CarouselComponent implements OnInit {
     if (this.modalActive) {
       this.modalPrevious();
     } else {
-      if (this.debounceLeft) {
-        this.previous();
-        this.debounceLeft = false;
-        setTimeout(this.arrowLeftCallback.bind(this), this.timeNumber);
-      }
+      this.previous();
     }
-  }
-
-  public arrowLeftCallback() {
-    this.debounceLeft = true;
   }
 
   // animation function. animates a distance specified by this.width in a time specified by this.time
