@@ -24,7 +24,6 @@ export class AppComponent implements OnInit  {
   constructor(private _api: ApiService) {}
 
   ngOnInit(): void {
-    console.log("ngOnInit")
     // Our singular API call, gets all 
     this._api.getPictures().pipe(
       take(1)
