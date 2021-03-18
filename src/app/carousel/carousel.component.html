@@ -1,0 +1,73 @@
+<div class="carousel-outer" (click)="toggleModal()">
+    <ul class="carousel-inner" #carousel>
+        <li *ngIf="displayPictureArray.length == 0 || loading">
+            <div class="loader carousel-loader">
+                
+            </div>
+        </li>
+        <li *ngIf="displayPictureArray.length > 0 && !loading">
+            <img
+            style="margin:auto 0;"
+            class="carouselImage"
+            src="https://picsum.photos/id/{{ displayPictureArray[displayPictureArray.length-1].id }}/1000/666"
+            >
+        </li>
+        <li *ngFor="let picture of displayPictureArray; index as i;" class="carousel-item">
+            <img
+            [hidden]="loading"
+            style="margin:auto 0;"
+            class="carouselImage"
+            (load)="imageLoad()"
+            src="https://picsum.photos/id/{{ picture.id }}/1000/666"
+            >
+        </li>
+        <li *ngIf="displayPictureArray.length > 0 && !loading">
+            <img
+            style="margin:auto 0;"
+            class="carouselImage"
+            src="https://picsum.photos/id/{{ displayPictureArray[0].id }}/1000/666"
+            >
+        </li>
+    </ul>
+</div>
+<div class="navigation">
+    <div (click)="previous()" class="nav-button left">
+        <p class="nav-button-text">Previous</p>
+    </div>
+    <div class="display-index">
+        <div class="display-index-text-wrap">
+            <p style="text-align:right;" class="display-index-text number-text">{{ displayPictureArray.length > 0 ?  displayIndex + 1 : "--" }}</p>
+            <p class="display-index-text"> / </p>
+            <p class="display-index-text number-text">{{ displayPictureArray.length > 0 ?  displayPictureArray.length : "--" }}</p>
+        </div>
+    </div>
+    <div (click)="next()" class="nav-button right">
+        <p class="nav-button-text">Next</p>
+    </div>
+</div>
+<div *ngIf="modalActive" class="modal">
+    <div class="modal-close-box" (click)="toggleModal()"></div>
+    <div class="modal-close modal-button" (click)="toggleModal()"><span class="arrow-right"></span><span class="arrow-left"></span></div>
+    <div 
+    *ngIf="!modalArr[displayIndex].loaded"
+    class="loader modal-loader"></div>
+    <img 
+    *ngFor="let picture of displayPictureArray; index as i"
+    [hidden]="displayIndex !== i"
+    (click)="toggleModal()"
+    (load)="modalImageLoad(i)"
+    class="modal-image"
+    src="https://picsum.photos/id/{{ picture.id }}/{{ picture.width }}/{{ picture.height }}"
+    alt=""
+    >
+    <div (click)="modalPrevious()" class="modal-button modal-left">
+        <div class="arrow-left-wrap">
+            <span class="arrow-left"></span>
+        </div>
+    </div>
+    <div (click)="modalNext()" class="modal-button modal-right">
+        <div class="arrow-right-wrap">
+            <span class="arrow-right"></span>
+        </div>
+    </div>
+</div>
