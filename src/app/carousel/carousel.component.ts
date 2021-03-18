@@ -24,7 +24,6 @@ export class CarouselComponent implements OnInit {
   @HostListener('window:keydown.arrowleft', ['$event'])
   @HostListener('window:keydown.arrowright', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    console.log(event);
     if (event.key == "ArrowRight") {
       console.log("ArrowRight")
       this.arrowRight()
