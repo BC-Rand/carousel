@@ -1,4 +1,4 @@
-import { Component, Directive, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, Directive, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { animate, AnimationBuilder, AnimationPlayer, style } from '@angular/animations';
 import { ApiService } from '../api.service';
 import { PicResponse } from '../types';
@@ -19,6 +19,23 @@ export class CarouselItemElement {
 export class CarouselComponent implements OnInit {
   // Our carousel (this specifically selects the ul element)
   @ViewChild('carousel') private carousel: ElementRef;
+
+  // Listeners/method for keydown left and right and debounce booleans
+  @HostListener('window:keydown.arrowleft', ['$event'])
+  @HostListener('window:keydown.arrowright', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    console.log(event);
+    if (event.key == "ArrowRight") {
+      console.log("ArrowRight")
+      this.arrowRight()
+    } else if (event.key == "ArrowLeft") {
+      console.log("ArrowLeft")
+      this.arrowLeft()
+    }
+  }
+
+  private debounceLeft = true;
+  private debounceRight = true;  
 
   // Array of pictures to display and our current picture index in it
   public displayPictureArray: PicResponse[] = [];
@@ -80,6 +97,42 @@ export class CarouselComponent implements OnInit {
   public previous(): void {
     if (this.animationQueue.length < 5) this.animationQueue.push(false);
     if (!this.animating) this.animationManager();
+  }
+
+  
+
+  // Navigate right on a right arrow key press
+  public arrowRight(): void {
+    if (this.modalActive) {
+      this.modalNext();
+    } else {
+      if (this.debounceRight) {
+        this.next();
+        this.debounceRight = false;
+        setTimeout(this.arrowRightCallback.bind(this), this.timeNumber);
+      }
+    }
+  }
+
+  public arrowRightCallback() {
+    this.debounceRight = true;
+  }
+
+  // Navigate left on a left arrow key press
+  public arrowLeft(): void {
+    if (this.modalActive) {
+      this.modalPrevious();
+    } else {
+      if (this.debounceLeft) {
+        this.previous();
+        this.debounceLeft = false;
+        setTimeout(this.arrowLeftCallback.bind(this), this.timeNumber);
+      }
+    }
+  }
+
+  public arrowLeftCallback() {
+    this.debounceLeft = true;
   }
 
   // animation function. animates a distance specified by this.width in a time specified by this.time
