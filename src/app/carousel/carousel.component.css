@@ -108,20 +108,20 @@ ul {
     font-weight: bold;
     font-size: 3em;
     user-select: none;
-    opacity: 20%;
+    opacity: 80%;
     transition: opacity 150ms cubic-bezier(0.25, 0.46, 0.45, 0.84);
 }
 .modal-button:hover {
-    opacity: 100%;
+    opacity: 1;
 } 
 .modal-button:focus {
-    opacity: 100%;
+    opacity: 1;
 }
 .modal-close {
     position: absolute;
     color: lightblue;
     z-index: 3;
-    opacity: 40%;
+    opacity: 80%;
     right: 1.5rem;
     top: 1rem;
     font-size: xx-large;
